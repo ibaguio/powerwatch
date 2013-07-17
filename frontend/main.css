@@ -1,9 +1,13 @@
 .card {
-  padding: 10px;
+  border-radius: 15px;
   background-color: #787878;
+  color: #fff;
 }
-.cardcontainer {
-  padding: 50px;
+.is-padded {
+  padding: 10px;
+}
+section.rowpad {
+  padding-top: 20px;
 }
 body {
   padding-top: 40px;
@@ -18,7 +22,4 @@ body {
   border-radius: 15px;
   background-color: #e0e0e0;
   box-shadow: 6px 6px 8px #888;
-}
-.row {
-  padding: 0px 0px 0px 40px;
 }

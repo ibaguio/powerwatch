@@ -22,12 +22,25 @@ html
               ul.dropdown-menu.pull-right
                 li
                   a(href='propertiesSearch.php') Logout
-      .cardcontainer.is-padded
+
+      .container
+        //we can create cards in this area
         .row
-          include card.jade
-          include card.jade
-          include card.jade
-          include card.jade
+          section.rowpad
+            include card.jade
+            include card.jade
+            include card.jade
+            include card.jade
+        .row
+          section.rowpad
+            include card.jade
+            include card.jade
+            include card.jade
+            include card.jade
+
+      .footer.span12.text-center
+        | 2013 Power Watch
+
 
   //We place this at the bottom of the page so it can load faster 
   script(src='http://code.jquery.com/jquery.js')
