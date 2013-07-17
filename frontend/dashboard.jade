@@ -1,0 +1,34 @@
+!!! 5
+html
+  head
+    title Watts App Login
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(href='bootstrap/css/bootstrap.min.css', rel='stylesheet', media='screen')
+    link(href='bootstrap/css/bootstrap-responsive.min.css', rel='stylesheet', media='screen')
+    link(href='main.css', rel='stylesheet', media='screen')
+  body
+    .navbar.navbar-fixed-top.navbar-inverse
+      .navbar-inner
+        .container
+          a.brand(href='#') Watts App
+          ul.nav.pull-right
+            form.navbar-search.pull-left
+              input.search-query(type='text', placeholder='Search')
+          ul.nav.pull-right
+            li.dropdown
+              a.dropdown-toggle(href='properties.php?type=showall', data-toggle='dropdown')
+                | USER
+                b.caret
+              ul.dropdown-menu.pull-right
+                li
+                  a(href='propertiesSearch.php') Logout
+      .cardcontainer.is-padded
+        .row
+          include card.jade
+          include card.jade
+          include card.jade
+          include card.jade
+
+  //We place this at the bottom of the page so it can load faster 
+  script(src='http://code.jquery.com/jquery.js')
+  script(src='bootstrap/js/bootstrap.min.js')
