@@ -6,6 +6,7 @@ html
     link(href='bootstrap/css/bootstrap.min.css', rel='stylesheet', media='screen')
     link(href='bootstrap/css/bootstrap-responsive.min.css', rel='stylesheet', media='screen')
     link(href='main.css', rel='stylesheet', media='screen')
+    script(src='main.js')
   body
     .navbar.navbar-fixed-top.navbar-inverse
       .navbar-inner
@@ -22,9 +23,11 @@ html
               ul.dropdown-menu.pull-right
                 li
                   a(href='propertiesSearch.php') Logout
+                li
+                  a(href='propertiesSearch.php') Settings
 
       .container
-        //we can create cards in this area
+        //we can create cards in this area        
         .row
           section.rowpad
             include card.jade
@@ -37,9 +40,10 @@ html
             include card.jade
             include card.jade
             include card.jade
-
-      .footer.span12.text-center
-        | 2013 Power Watch
+        .row
+          section.rowpad
+            .footer.span12.text-center
+              | 2013 Power Watch
 
 
   //We place this at the bottom of the page so it can load faster 
