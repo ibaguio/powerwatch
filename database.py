@@ -8,10 +8,25 @@ DATABASE = constants.db_filename
 
 """Returns a database connection/cursor"""
 def get_db():
+	import sys
 	db = getattr(g,'_database',None)
 	if db is None:
-		db = g._database = lite.connect(DATABASE)
+		#try:
+			print "Connecting to",DATABASE
+			create_db_folder()
+			db = g._database = lite.connect(DATABASE)
+		#except Exception, e:
+		#	print e
+		#	print "WILL TERMINATE"
+		#	sys.exit(0)
 	return db
+
+#creates the 'database' folder
+def create_db_folder():
+	import os
+	src = os.path.dirname(__file__) + os.sep + constants.db_folder
+	if not os.path.exists(src):
+		os.makedirs(src)
 
 def init_db():
 	print "Initializing database"
@@ -20,8 +35,25 @@ def init_db():
 		db.cursor().executescript(constants.db_init_script)
 		db.commit()
 
+def save_data(data_):
+	insert_sql = constants.db_insert_reading%(data_)
+	print "SQL:",insert_sql
+	if db is None: get_db()
+	try:
+		db.cursor.executescript(insert_sql)
+		return True
+	except Exception, e:
+		print "FAILED TO INSERT"
+
 @app.teardown_appcontext
 def close_connection(exception):
 	db = getattr(g,'_database',None)
 	if db is not None:
 		db.close()
+
+"""
+TODO:
+	continue database storing function in main.py
+
+
+"""
