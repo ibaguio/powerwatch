@@ -5,6 +5,8 @@ from flask import request
 import database, json
 
 app = Flask(__name__)
+stylus2css(app, css_folder='static', stylus_folder='stylus')
+app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 app.debug = True
 database.init_db()
 
@@ -16,12 +18,12 @@ REQUEST_OK = "OK"
 REQUEST_FAILED = "NOT"
 
 @app.route("/")
-def hello_world():
-	return 'Hello World'
+def dashboard():
+	return render("dashboard.jade")
 
-@app.route("/test")
+@app.route("/card")
 def test():
-	return render("test.html")
+	return render("card.jade")
 
 #this is the handler that receives the request
 #from the pdus. Only accepts post requests
