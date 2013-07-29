@@ -5,7 +5,7 @@ from flask import request
 import database, json
 
 app = Flask(__name__)
-app.debug = True
+#app.debug = True
 database.init_db()
 
 #for now use list as cache
@@ -40,12 +40,15 @@ def post_info(pdu_id):
 	#parse data
 	try:
 		json_data = request.stream.read()
-		print "POST BODY:",json_data
-		print "Loading json from POST Body"
-		data = json.loads(json_data)
-		print "Data load successful"
-		if not checkData(json_data):
-			raise Exception
+		ss = json_data.split("&")
+		for s in ss:
+			print s
+		#print "POST BODY:",json_data
+		#print "Loading json from POST Body"
+		#data = json.loads(json_data)
+		#print "Data load successful"
+		#if not checkData(json_data):
+		#	raise Exception
 	except Exception, e:
 		print "INVALID_PARAMS"
 		print e
@@ -56,7 +59,6 @@ def post_info(pdu_id):
 	else: return REQUEST_FAILED
 
 def saveData(data_):
-
 	return True
 
 #check the dictionary if it has the valid 
@@ -64,7 +66,7 @@ def checkData(data_):
 	import collections
 
 	print "checking if data has valid values"
-	keys_tocheck = ["dt","volt","pow","amp"]
+	keys_tocheck = ["watts","va","vr","pf","volts","amps"]
 	valid = collections.Counter(keys_tocheck) == collections.Counter(data_.keys())
 	print "VALID?",valid
 
@@ -80,4 +82,5 @@ def addPDUCache(pdu_id):
 		tmp_cache.append(pdu_id)
 
 if __name__ == "__main__":
+	print "Running host"
 	app.run(host='0.0.0.0')
