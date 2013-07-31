@@ -1,12 +1,12 @@
-extends index.jade
+extends base.jade
 block content
 	.container
 		section.rowpad
 			.row
-				form.form-signin.login.offset4.span4
+				form.form-signin.login.offset4.span4(action='/login', method='post')
 					h2.form-signin-heading Login
-					input#inputEmail(type='text', placeholder='Username')
-					input#inputPassword(type='password', placeholder='Password')
+					input#username(name='username', type='text', placeholder='Username')
+					input#password(name='password', type='password', placeholder='Password')
 					//
 						label.checkbox
 							input(type='checkbox', value='remember-me')

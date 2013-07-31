@@ -6,7 +6,7 @@ import database, json
 
 app = Flask(__name__)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
-#app.debug = True
+app.debug = True
 database.init_db()
 
 #for now use list as cache
@@ -16,15 +16,18 @@ INVALID_PARAMS = "INVALID_PARAMS"
 REQUEST_OK = "OK"
 REQUEST_FAILED = "NOT"
 
-@app.route("/dashboard")
-def dashboard():
-	return render("dashboard.jade",title="Dashboard")
-
 @app.route("/")
 def home():
 	return render("login.jade",title="Login")
 
-@app.route("/login")
+@app.route("/login",methods=['POST'])
+def login(): #Pseudo Login
+	username = request.form['username']
+	password = request.form['password']
+	if username == "admin" and password == "admin":
+		return render("dashboard.jade", title="Dashboard",user=username)
+	else:
+		return "WRONG PASSWORD"
 
 @app.route("/card")
 def test():
