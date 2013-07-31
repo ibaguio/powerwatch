@@ -28,7 +28,7 @@ def login(): #Pseudo Login
 	if session['username'] == "admin" and session['password'] == "admin":
 		return render("dashboard.jade", title="Dashboard",user=session['username'])
 	else:
-		return "WRONG PASSWORD"
+		return render("login.jade",error="Username/Password not found")
 
 @app.route("/card")
 def test():

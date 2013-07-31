@@ -7,9 +7,9 @@ block content
 					h2.form-signin-heading Login
 					input#username(name='username', type='text', placeholder='Username')
 					input#password(name='password', type='password', placeholder='Password')
+					p.error=error
 					//
 						label.checkbox
 							input(type='checkbox', value='remember-me')
 							| Remember me
-					br
 					button.btn.btn-small.btn-primary(type='submit') Sign in

@@ -1,4 +1,4 @@
-.card {
+#.card {
   border-radius: 15px;
   background-color: #505050;
   color: #fff;
@@ -25,4 +25,8 @@ body {
   border-radius: 15px;
   background-color: #e0e0e0;
   box-shadow: 6px 6px 8px #888;
+}
+
+.error{
+  color:red;
 }
