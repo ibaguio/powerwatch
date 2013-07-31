@@ -15,6 +15,7 @@ INVALID_PDU = "INVALID_PDU"
 INVALID_PARAMS = "INVALID_PARAMS"
 REQUEST_OK = "OK"
 REQUEST_FAILED = "NOT"
+session = {}
 
 @app.route("/")
 def home():
@@ -22,10 +23,10 @@ def home():
 
 @app.route("/login",methods=['POST'])
 def login(): #Pseudo Login
-	username = request.form['username']
-	password = request.form['password']
-	if username == "admin" and password == "admin":
-		return render("dashboard.jade", title="Dashboard",user=username)
+	session['username'] = request.form['username']
+	session['password'] = request.form['password']
+	if session['username'] == "admin" and session['password'] == "admin":
+		return render("dashboard.jade", title="Dashboard",user=session['username'])
 	else:
 		return "WRONG PASSWORD"
 
