@@ -30,9 +30,12 @@ def login(): #Pseudo Login
 	else:
 		return render("login.jade",error="Username/Password not found")
 
-@app.route("/card")
-def test():
-	return render("card.jade",name="TEST",pow="42",temp="25")
+@app.route("/card", methods=['GET'])
+def get_card():
+	print "YouGETCARD"
+	#How many cards do I print? JSON Dapat ito no?
+	#Data in each card?
+	return "You got card data!"
 
 #this is the handler that receives the request
 #from the pdus. Only accepts post requests
