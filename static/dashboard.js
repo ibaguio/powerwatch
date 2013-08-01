@@ -1,6 +1,6 @@
 $(function() {
   $.get('http://localhost:5000/card', function(data) {
-    $("#test").text(data);
+    $("#test").html(data);
   });
   return false;
 });

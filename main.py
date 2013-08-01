@@ -35,7 +35,7 @@ def get_card():
 	print "YouGETCARD"
 	#How many cards do I print? JSON Dapat ito no?
 	#Data in each card?
-	return "You got card data!"
+	return render("card.jade",name="HELLO",pow="13kWorld",temp="35C")
 
 #this is the handler that receives the request
 #from the pdus. Only accepts post requests
