@@ -29,8 +29,9 @@ def getPage(url,data,verbose=False,):
         print 'Reason:', e.reason
 
 def sendData(data_):
+    import json
     if not checkData(data_): return
-    page = getPage(SERVER_ADDRESS, data_)
+    page = getPage(SERVER_ADDRESS, json.dumps(data_))
     return page == "OK"
 
 #check the dictionary if it has the valid 
