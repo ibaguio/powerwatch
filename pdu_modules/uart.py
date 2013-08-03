@@ -1,5 +1,7 @@
-import serial,time,json
+import serial,time,json,sys,getopt
 from HttpModule import sendData
+
+SERVER_ADDRESS = "192.168.1.108:5000/post_info/1"
 
 TIME_INTERVAL = 5;
 DECIMATION = 2;
@@ -11,6 +13,18 @@ def convert(tmp):
 	except Exception,e:
 		if DEBUG: print e
 	return 0.0
+
+#check command line if server address is given
+def getServerAddress(argv):
+	global SERVER_ADDRESS
+	try:
+		opts,args = getopt.getopt(argv,"",["server="])
+	except getopt.GetoptError:
+		print "uart.py --server=<ip address of server>"
+		sys.exit(0)
+	for opt,arg in opts:
+		if opt == "--server":
+			SERVER_ADDRESS = "%s/post_info/1" %(arg)
 
 def main():
 	ser = serial.Serial("/dev/ttyAMA0")
@@ -37,10 +51,11 @@ def main():
 			PF = convert(PFstr)
 			volt = convert(voltstr)
 			amp = convert(ampstr)
-			
-			data = {"watts":watts,"va":VA,"vr":VR,"pf":PF,"volt":volt,"amp":amp}
+			time_ = time.time()
+
+			data = {"watts":watts,"va":VA,"vr":VR,"pf":PF,"volt":volt,"amp":amp,"dt":time_}
 			if DEBUG: print json.dumps(data)
-			sendData(data)
+			sendData(data,SERVER_ADDRESS)
 
 			wattsstr =''
 			VAstr= ''
@@ -67,4 +82,6 @@ def main():
 		
 	ser.close()
 
-main()
+if __name__ == "__main__":
+	getServerAddress(sys.argv[1:])
+	main()

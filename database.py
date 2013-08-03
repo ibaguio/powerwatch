@@ -38,12 +38,14 @@ def init_db():
 def save_data(data_):
 	insert_sql = constants.db_insert_reading%(data_)
 	print "SQL:",insert_sql
-	if db is None: get_db()
+	db = getattr(g,'_database',None)
+	if db is None: db = get_db()
 	try:
-		db.cursor.executescript(insert_sql)
+		db.cursor().executescript(insert_sql)
 		return True
 	except Exception, e:
 		print "FAILED TO INSERT"
+		print e
 
 @app.teardown_appcontext
 def close_connection(exception):
