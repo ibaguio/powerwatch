@@ -5,7 +5,8 @@ from flask import request
 import database, json
 
 app = Flask(__name__)
-#app.debug = True
+app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
+app.debug = True
 database.init_db()
 
 #for now use list as cache
@@ -14,14 +15,24 @@ INVALID_PDU = "INVALID_PDU"
 INVALID_PARAMS = "INVALID_PARAMS"
 REQUEST_OK = "OK"
 REQUEST_FAILED = "NOT"
+session = {}
 
 @app.route("/")
-def hello_world():
-	return 'Hello World'
+def home():
+	return render("login.jade",title="Login")
 
-@app.route("/test")
+@app.route("/login",methods=['POST'])
+def login(): #Pseudo Login
+	session['username'] = request.form['username']
+	session['password'] = request.form['password']
+	if session['username'] == "admin" and session['password'] == "admin":
+		return render("dashboard.jade", title="Dashboard",user=session['username'])
+	else:
+		return "WRONG PASSWORD"
+
+@app.route("/card")
 def test():
-	return render("test.html")
+	return render("card.jade",name="TEST",pow="42",temp="25")
 
 #this is the handler that receives the request
 #from the pdus. Only accepts post requests
