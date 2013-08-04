@@ -3,3 +3,4 @@ __init__.py
 .DS_Store
 database/*
 templates/*.html
+test/*

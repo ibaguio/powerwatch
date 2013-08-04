@@ -53,15 +53,16 @@ def post_info(pdu_id):
 	
 	#parse data
 	try:
-		json_data = request.stream.read()
-		ss = json_data.split("&")
-		for s in ss:
-			print s
-		#print "POST BODY:",json_data
+		data_ = json.loads(request.stream.read())
+		print data_
+		#ss = data_.split("&")
+		#for s in ss:
+			#print s
+		#print "POST BODY:",data_
 		#print "Loading json from POST Body"
-		#data = json.loads(json_data)
+		#data = json.loads(data_)
 		#print "Data load successful"
-		#if not checkData(json_data):
+		#if not checkData(data_):
 		#	raise Exception
 	except Exception, e:
 		print "INVALID_PARAMS"
@@ -69,20 +70,17 @@ def post_info(pdu_id):
 		return INVALID_PARAMS
 
 	#save data
-	if saveData(json_data): return REQUEST_OK
+	if database.save_data(data_): return REQUEST_OK
 	else: return REQUEST_FAILED
-
-def saveData(data_):
-	return True
 
 #check the dictionary if it has the valid 
 def checkData(data_):
 	import collections
 
-	print "checking if data has valid values"
-	keys_tocheck = ["watts","va","vr","pf","volts","amps"]
+	#print "checking if data has valid values"
+	keys_tocheck = ["watts","va","vr","pf","volts","amps","dt"]
 	valid = collections.Counter(keys_tocheck) == collections.Counter(data_.keys())
-	print "VALID?",valid
+	#print "VALID?",valid
 
 	return valid
 

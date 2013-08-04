@@ -1,7 +1,6 @@
-import httplib, urllib, urllib2
+import httplib, urllib, urllib2,json
 from urllib2 import HTTPError, URLError
-
-SERVER_ADDRESS = "192.168.1.108:5000/post_info/1"
+DEBUG = TRUE
 
 """Attempts to open a url and returns the contents if url is correct
    returns False or none if error (404, etc)"""
@@ -9,7 +8,6 @@ SERVER_ADDRESS = "192.168.1.108:5000/post_info/1"
 def getPage(url,data,verbose=False,):
     if url[:7] != "http://": url = "http://"+url
 
-    data = urllib.urlencode(data)
     try:
         if verbose: print 'Trying to fetch',url
 
@@ -28,19 +26,20 @@ def getPage(url,data,verbose=False,):
         print 'Failed to reach',url
         print 'Reason:', e.reason
 
-def sendData(data_):
+def sendData(data_,server):
+    import json
     if not checkData(data_): return
-    page = getPage(SERVER_ADDRESS, data_)
+    toSend = json.dumps(data_)
+    page = getPage(server, toSend)
     return page == "OK"
 
 #check the dictionary if it has the valid 
 def checkData(data_):
     import collections
 
-    print "checking if data has valid values"
-    keys_tocheck = ["watts","va","vr","pf","volt","amp"]
+    if DEBUG: print "checking if data has valid values"
+    keys_tocheck = ["watts","va","vr","pf","volt","amp","dt"]
     valid = collections.Counter(keys_tocheck) == collections.Counter(data_.keys())
-    print "VALID?",valid
 
     return valid
 
