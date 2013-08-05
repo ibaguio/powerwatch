@@ -1,10 +1,49 @@
 extends base.jade
 block content
-	.container
-		//This is where you put rows and cards
-		.row
-			section.rowpad#test
-		.row
-			section.rowpad
-				.footer.span12.text-center
-					| 2013 Power Watch
+   .container
+      .row
+         .span2
+            ul.nav.nav-list.well
+               li.nav-header PDU Management
+               li
+                  a(href="#addPDU",role="button",data-toggle="modal",data-target="#add-pdu") Add PDU
+               li
+                  a(href="") Edit PDU
+               li
+                  a(href="") Remove PDU
+               li.divider
+         .span9.well
+            table.table.table-striped.table-bordered
+               thead
+                  tr
+                     td ID
+                     td Name
+                     td Status
+                     td Uptime
+                     td Commands
+               tbody
+                  tr
+                     td 1
+                     td new pdu
+                     td Running
+                     td 5 mins 
+                     td
+
+
+      .footer.span12.text-center
+         | 2013 Power Watch
+
+   .modal.hide.fade#add-pdu(role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
+      .modal-header
+         button.close(type="button",data-dismiss="modal",aria-hidden="false",role="dialog")&times
+         h3 Add PDU
+      .modal-body
+         form
+            input#pdu_name(name="pdu_name",type="text"   )
+
+block othernav
+   ul.nav
+      li.active
+         a(hreaf="/") Dashboard
+      li
+         a(hreaf="/") View PDUs

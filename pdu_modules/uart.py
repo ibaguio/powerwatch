@@ -1,5 +1,6 @@
 import serial,time,json,sys,getopt
 from HttpModule import sendData
+from Config import *
 
 SERVER_ADDRESS = "192.168.1.108:5000/post_info/1"
 

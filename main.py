@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template as render
-from flask import request
+from flask import request, make_response
 
 import database, json
 
@@ -15,10 +15,19 @@ INVALID_PDU = "INVALID_PDU"
 INVALID_PARAMS = "INVALID_PARAMS"
 REQUEST_OK = "OK"
 REQUEST_FAILED = "NOT"
+
+SECRET_WORD = "ivan_pogi"
 session = {}
+
+def isLoggedIn():
+	credentials = request.cookies.get('credentials')
+	return credentials == SECRET_WORD
 
 @app.route("/")
 def home():
+	username = request.cookies.get('username')
+	if isLoggedIn():
+		return render("dashboard.jade", title="Dashboard",user=session['username'])	
 	return render("login.jade",title="Login")
 
 @app.route("/login",methods=['POST'])
@@ -26,7 +35,10 @@ def login(): #Pseudo Login
 	session['username'] = request.form['username']
 	session['password'] = request.form['password']
 	if session['username'] == "admin" and session['password'] == "admin":
-		return render("dashboard.jade", title="Dashboard",user=session['username'])
+		resp = make_response(render("dashboard.jade", title="Dashboard",user=session['username']))
+		resp.set_cookie('username',session['username'])
+		resp.set_cookie('credentials',SECRET_WORD)
+		return resp
 	else:
 		return render("login.jade",error="Username/Password not found")
 
