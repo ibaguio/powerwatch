@@ -9,8 +9,6 @@ db_init_script = """CREATE TABLE IF NOT EXISTS account (account_id INT, rate REA
 					CREATE TABLE IF NOT EXISTS device_readings (device_id INT, voltage REAL, current REAL, watts REAL,
 					va REAL, vr REAL, pf REAL,time REAL, FOREIGN KEY (device_id) REFERENCES devices(device_id)); """
 
-2 + 8 * 7
-
 db_insert_reading = """INSERT INTO device_readings(voltage, current, watts, pf, va,vr, time) VALUES(%(volt)f, %(amp)f, %(watts)f,
 					%(pf)f, %(va)f, %(vr)f, \'%(dt)s\');"""
 
