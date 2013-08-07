@@ -46,6 +46,15 @@ def login(): #Pseudo Login
 def test():
 	return render("card.jade",name="TEST",pow="42",temp="25")
 
+@app.route("/pdu/new",methods=['POST'])
+def newPDU():
+	if isLoggedIn():
+		return request.form
+	return notLoggedIn()
+
+def notLoggedIn():
+	return "Unauthorized access. Please Login"
+
 #this is the handler that receives the request
 #from the pdus. Only accepts post requests
 #
@@ -64,15 +73,6 @@ def post_info(pdu_id):
 	try:
 		data_ = json.loads(request.stream.read())
 		print data_
-		#ss = data_.split("&")
-		#for s in ss:
-			#print s
-		#print "POST BODY:",data_
-		#print "Loading json from POST Body"
-		#data = json.loads(data_)
-		#print "Data load successful"
-		#if not checkData(data_):
-		#	raise Exception
 	except Exception, e:
 		print "INVALID_PARAMS"
 		print e
