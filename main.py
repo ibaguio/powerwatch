@@ -6,7 +6,7 @@ import database, json
 
 app = Flask(__name__)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
-app.debug = True
+#app.debug = True
 database.init_db()
 
 #for now use list as cache
@@ -34,7 +34,7 @@ def logout():
 def home():
 	username = request.cookies.get('username')
 	if isLoggedIn():
-		return render("dashboard.jade", title="Dashboard",user=username,test=test)	
+		return render("admin.jade", title="Admin",user=username,test=test)	
 	return render("login.jade",title="Login")
 
 @app.route("/login",methods=['POST'])
@@ -42,12 +42,12 @@ def login(): #Pseudo Login
 	session['username'] = request.form['username']
 	session['password'] = request.form['password']
 	if session['username'] == "admin" and session['password'] == "admin":
-		resp = make_response(render("dashboard.jade", title="Dashboard",user=session['username'],test=test))
+		resp = make_response(render("admin.jade", title="Admin",user=session['username'],test=test))
 		resp.set_cookie('username',session['username'])
 		resp.set_cookie('credentials',SECRET_WORD)
 		return resp
 	else:
-		return render("login.jade",error="Username/Password not found")
+		return render("login.jade",error="Username/Password not found",title="Login")
 
 @app.route("/card", methods=['GET'])
 def get_card():

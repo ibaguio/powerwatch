@@ -16,17 +16,7 @@ html
         .container  
           a.brand(href='/') Watts App
           block othernav
-          
-          ul.nav.pull-right
-            form.navbar-search.pull-left
-              input.search-query(type='text', placeholder='Search')
-          ul.nav.pull-right
-            li.dropdown
-              a.dropdown-toggle(href="#", data-toggle='dropdown', role="button")=user
-                b.caret
-              ul.dropdown-menu.pull-right
-                li
-                  a(role="menu" ,href="/logout") Logout
+          block account 
     block content
       .container
         .row

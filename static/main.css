@@ -27,6 +27,15 @@ body {
   box-shadow: 6px 6px 8px #888;
 }
 
+.clickable:hover{
+  cursor:pointer;
+  background-color:black;
+}
+
+tr.clickable{
+  background-color:white;
+}
+
 .error{
   color:red;
 }
