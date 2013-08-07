@@ -1,8 +1,9 @@
 extends base.jade
 block content
   .container
-    .row
-      div.offset2.span8#graph(height="400px")
+    .is-padded  
+      .row
+          div.offset2.span8#graph(height="400px")
 
 block othernav
    ul.nav
@@ -36,7 +37,6 @@ block scripts
                 text: 'Power Consumption'
             },
             xAxis: {
-                categories: ['Apples', 'Bananas', 'Oranges']
             },
             yAxis: {
                 title: {
@@ -45,6 +45,6 @@ block scripts
             },
             series: [{
                 name: 'PDU1',
-                data: [1,2,3]
+                data: #{graphdata}
             }]
         });
