@@ -34,7 +34,8 @@ def logout():
 def home():
 	username = request.cookies.get('username')
 	if isLoggedIn():
-		return render("dashboard.jade", title="Dashboard",user=username)	
+		test=[{"id":'123',"name":"pdu1","status":"online","uptime":"3mins"},{"id":'1234',"name":"pdu2","status":"online","uptime":"31mins"}]
+		return render("dashboard.jade", title="Dashboard",user=username,test=test)	
 	return render("login.jade",title="Login")
 
 @app.route("/login",methods=['POST'])

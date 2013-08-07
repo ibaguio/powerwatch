@@ -20,12 +20,23 @@ block content
                      td Name
                      td Status
                      td Uptime
+                     td Consumption
                tbody
                   tr
                      td 1
                      td new pdu
                      td Running
                      td 5 mins 
+                     td TESTSTS
+                  for d in test
+                    tr
+                      td=d['id']
+                      td=d['name']
+                      td=d['status']
+                      td=d['uptime']
+                      td=d['consumption']
+
+
 
       .footer.span12.text-center
          | 2013 Power Watch
