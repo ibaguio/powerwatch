@@ -30,6 +30,7 @@ def logout():
 		resp.set_cookie('credentials',"")
 		resp.set_cookie('username',"")
 	return render("login.jade",title="Login")
+
 @app.route("/")
 def home():
 	username = request.cookies.get('username')
@@ -49,12 +50,17 @@ def login(): #Pseudo Login
 	else:
 		return render("login.jade",error="Username/Password not found",title="Login")
 
-@app.route("/card", methods=['GET'])
-def get_card():
-	print "YouGETCARD"
-	#How many cards do I print? JSON Dapat ito no?
-	#Data in each card?
-	return render("card.jade",name="HELLO",pow="13kWorld",temp="35C",status="meh")
+@app.route("/pdugraph/<pdu_id>")
+def graph_data(pdu_id):
+	return render("graph.jade")
+
+
+#@app.route("/card", methods=['GET'])
+#def get_card():
+#	print "YouGETCARD"
+#	#How many cards do I print? JSON Dapat ito no?
+#	#Data in each card?
+#	return render("card.jade",name="HELLO",pow="13kWorld",temp="35C",status="meh")
 
 #this is the handler that receives the request
 #from the pdus. Only accepts post requests
