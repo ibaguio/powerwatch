@@ -2,6 +2,7 @@ extends base.jade
 block content
   .container
     .is-padded  
+      h1.text-center #{name}
       .row
           div.offset2.span8#graph(height="400px")
 
@@ -44,7 +45,7 @@ block scripts
                 }
             },
             series: [{
-                name: 'PDU1',
+                name: '#{name}',
                 data: #{graphdata}
             }]
         });
