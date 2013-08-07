@@ -15,7 +15,7 @@ INVALID_PDU = "INVALID_PDU"
 INVALID_PARAMS = "INVALID_PARAMS"
 REQUEST_OK = "OK"
 REQUEST_FAILED = "NOT"
-
+test=[{"id":'123',"name":"pdu1","status":"online","uptime":"3 mins","consumption":"5"},{"id":'1234',"name":"pdu2","status":"online","uptime":"31 mins","consumption":"5"},{"id":'123324',"name":"pdu3","status":"dead","uptime":"321 mins","consumption":"5"}]
 SECRET_WORD = "ivan_pogi"
 session = {}
 
@@ -23,11 +23,18 @@ def isLoggedIn():
 	credentials = request.cookies.get('credentials')
 	return credentials == SECRET_WORD
 
+@app.route("/logout")
+def logout():
+	if isLoggedIn():
+		resp = make_response(render("login.jade", title="Login"))
+		resp.set_cookie('credentials',"")
+		resp.set_cookie('username',"")
+	return render("login.jade",title="Login")
 @app.route("/")
 def home():
 	username = request.cookies.get('username')
 	if isLoggedIn():
-		return render("dashboard.jade", title="Dashboard",user=session['username'])	
+		return render("dashboard.jade", title="Dashboard",user=username,test=test)	
 	return render("login.jade",title="Login")
 
 @app.route("/login",methods=['POST'])
@@ -35,16 +42,19 @@ def login(): #Pseudo Login
 	session['username'] = request.form['username']
 	session['password'] = request.form['password']
 	if session['username'] == "admin" and session['password'] == "admin":
-		resp = make_response(render("dashboard.jade", title="Dashboard",user=session['username']))
+		resp = make_response(render("dashboard.jade", title="Dashboard",user=session['username'],test=test))
 		resp.set_cookie('username',session['username'])
 		resp.set_cookie('credentials',SECRET_WORD)
 		return resp
 	else:
-		return "WRONG PASSWORD"
+		return render("login.jade",error="Username/Password not found")
 
-@app.route("/card")
-def test():
-	return render("card.jade",name="TEST",pow="42",temp="25")
+@app.route("/card", methods=['GET'])
+def get_card():
+	print "YouGETCARD"
+	#How many cards do I print? JSON Dapat ito no?
+	#Data in each card?
+	return render("card.jade",name="HELLO",pow="13kWorld",temp="35C",status="meh")
 
 #this is the handler that receives the request
 #from the pdus. Only accepts post requests

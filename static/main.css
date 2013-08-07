@@ -26,3 +26,7 @@ body {
   background-color: #e0e0e0;
   box-shadow: 6px 6px 8px #888;
 }
+
+.error{
+  color:red;
+}
