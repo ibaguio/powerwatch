@@ -1,41 +1,26 @@
 extends base.jade
 block content
    .container
-      .row
-         .span2
-            ul.nav.nav-list.well
-               li.nav-header PDU Management
-               li
-                  a(href="#addPDU",role="button",data-toggle="modal",data-target="#add-pdu") Add PDU
-               li
-                  a(href="") Edit PDU
-               li
-                  a(href="") Remove PDU
-               li.divider
-         .span9.well
-            table.table.table-bordered.table-hover
-               thead
-                  tr
-                     td ID
-                     td Name
-                     td Status
-                     td Uptime
-                     td Consumption
-               tbody
-                  for d in test
-                    tr.clickable
-                      td
-                        a(href="/pdugraph/#{d['id']}")=d['id']
-                      td=d['name']
-                      td
-                        if d['status']=="online"
-                          span.label.label-success Online
-                        else
-                          span.label.label-important Offline
-                      td=d['uptime']
-                      td=d['consumption']
-
-
-
       .footer.span12.text-center
          | 2013 Power Watch
+
+block othernav
+   ul.nav
+      li
+         a(href="/") Home
+      li.active
+         a(href="/") Admin Page
+
+block account 
+  ul.nav.pull-right
+    form.navbar-search.pull-left
+      input.search-query(type='text', placeholder='Search')
+  ul.nav.pull-right
+    li.dropdown
+      a.dropdown-toggle(href="#", data-toggle='dropdown', role="button")=user
+        b.caret
+      ul.dropdown-menu.pull-right
+        li
+          a(role="menu" ,href="/settings") Settings
+        li
+          a(role="menu" ,href="/logout") Logout

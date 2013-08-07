@@ -6,7 +6,7 @@ import database, json
 
 app = Flask(__name__)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
-#app.debug = True
+app.debug = True
 database.init_db()
 
 #for now use list as cache
