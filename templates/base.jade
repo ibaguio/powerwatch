@@ -20,15 +20,15 @@ html
               input.search-query(type='text', placeholder='Search')
           ul.nav.pull-right
             li.dropdown
-              a.dropdown-toggle(href='properties.php?type=showall', data-toggle='dropdown')=user
+              a.dropdown-toggle(href="#", data-toggle='dropdown', role="button")=user
                 b.caret
               ul.dropdown-menu.pull-right
                 li
-                  a(href='propertiesSearch.php') Logout
+                  a(role="menu" ,href="/logout") Logout
     block content
   //
      We place this at the bottom of the page so it can load faster 
   //script(src='http://code.jquery.com/jquery.js')
-  script(src='static/bootstrap/js/bootstrap.min.js')  
   script(src='static/jquery-2.0.2.min.js')
+  script(src='static/bootstrap/js/bootstrap.js')  
   script(src='static/dashboard.js')  

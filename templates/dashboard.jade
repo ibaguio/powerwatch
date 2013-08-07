@@ -20,15 +20,12 @@ block content
                      td Name
                      td Status
                      td Uptime
-                     td Commands
                tbody
                   tr
                      td 1
                      td new pdu
                      td Running
                      td 5 mins 
-                     td
-
 
       .footer.span12.text-center
          | 2013 Power Watch
@@ -38,8 +35,18 @@ block content
          button.close(type="button",data-dismiss="modal",aria-hidden="false",role="dialog")&times
          h3 Add PDU
       .modal-body
-         form
-            input#pdu_name(name="pdu_name",type="text"   )
+        form.form-horizontal(action="/pdu/new", method="post")
+            .control-group
+                label.control-label(for='pdu_name') PDU Name
+                .controls
+                  input#pdu_name(type='text', placeholder='PDU Name')
+              .control-group
+                label.control-label(for='ipaddress') IP Address
+                .controls
+                  input#ipaddress(type='text', placeholder='IP Address')
+              .control-group
+                .controls
+                  button.btn(type='submit') Sign in
 
 block othernav
    ul.nav

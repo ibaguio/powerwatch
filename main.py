@@ -23,11 +23,18 @@ def isLoggedIn():
 	credentials = request.cookies.get('credentials')
 	return credentials == SECRET_WORD
 
+@app.route("/logout")
+def logout():
+	if isLoggedIn():
+		resp = make_response(render("login.jade", title="Login"))
+		resp.set_cookie('credentials',"")
+		resp.set_cookie('username',"")
+	return render("login.jade",title="Login")
 @app.route("/")
 def home():
 	username = request.cookies.get('username')
 	if isLoggedIn():
-		return render("dashboard.jade", title="Dashboard",user=session['username'])	
+		return render("dashboard.jade", title="Dashboard",user=username)	
 	return render("login.jade",title="Login")
 
 @app.route("/login",methods=['POST'])
