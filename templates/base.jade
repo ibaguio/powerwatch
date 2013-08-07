@@ -5,28 +5,26 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     //
        Bootstrap 
-    link(href='static/bootstrap/css/bootstrap.min.css', rel='stylesheet', media='screen')
-    link(href='static/bootstrap/css/bootstrap-responsive.min.css', rel='stylesheet', media='screen')
-    link(href='static/main.css', rel='stylesheet', media='screen')
+    link(href='/static/bootstrap/css/bootstrap.min.css', rel='stylesheet', media='screen')
+    link(href='/static/bootstrap/css/bootstrap-responsive.min.css', rel='stylesheet', media='screen')
+    link(href='/static/main.css', rel='stylesheet', media='screen')
   body
+
+
     .navbar.navbar-fixed-top.navbar-inverse
       .navbar-inner
-        .container
-          a.brand(href='#') Watts App
+        .container  
+          a.brand(href='/') Watts App
           block othernav
-          
-          ul.nav.pull-right
-            form.navbar-search.pull-left
-              input.search-query(type='text', placeholder='Search')
-          ul.nav.pull-right
-            li.dropdown
-              a.dropdown-toggle(href='properties.php?type=showall', data-toggle='dropdown')=user
-                b.caret
-              ul.dropdown-menu.pull-right
-                li
-                  a(href='propertiesSearch.php') Logout
+          block account 
     block content
+      .container
+        .row
+          .footer.span12.text-center
+          | 2013 Power Watch          
   //
      We place this at the bottom of the page so it can load faster 
-  script(src='http://code.jquery.com/jquery.js')
-  script(src='bootstrap/js/bootstrap.min.js')
+  //script(src='http://code.jquery.com/jquery.js')
+  script(src='/static/jquery-2.0.2.min.js')
+  script(src='/static/bootstrap/js/bootstrap.js')  
+  script(src='/static/dashboard.js')  
