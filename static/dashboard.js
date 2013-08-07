@@ -7,3 +7,8 @@ $(function() {
   });
   return false;
 });
+
+$('tr.clickable').click(function () {
+   var url = $(this).find('a:first').attr('href');
+   window.location.href = url;
+});

@@ -15,7 +15,7 @@ INVALID_PDU = "INVALID_PDU"
 INVALID_PARAMS = "INVALID_PARAMS"
 REQUEST_OK = "OK"
 REQUEST_FAILED = "NOT"
-
+test=[{"id":'123',"name":"pdu1","status":"online","uptime":"3 mins","consumption":"5"},{"id":'1234',"name":"pdu2","status":"online","uptime":"31 mins","consumption":"5"},{"id":'123324',"name":"pdu3","status":"dead","uptime":"321 mins","consumption":"5"}]
 SECRET_WORD = "ivan_pogi"
 session = {}
 
@@ -34,7 +34,6 @@ def logout():
 def home():
 	username = request.cookies.get('username')
 	if isLoggedIn():
-		test=[{"id":'123',"name":"pdu1","status":"online","uptime":"3mins"},{"id":'1234',"name":"pdu2","status":"online","uptime":"31mins"}]
 		return render("dashboard.jade", title="Dashboard",user=username,test=test)	
 	return render("login.jade",title="Login")
 
@@ -43,7 +42,7 @@ def login(): #Pseudo Login
 	session['username'] = request.form['username']
 	session['password'] = request.form['password']
 	if session['username'] == "admin" and session['password'] == "admin":
-		resp = make_response(render("dashboard.jade", title="Dashboard",user=session['username']))
+		resp = make_response(render("dashboard.jade", title="Dashboard",user=session['username'],test=test))
 		resp.set_cookie('username',session['username'])
 		resp.set_cookie('credentials',SECRET_WORD)
 		return resp

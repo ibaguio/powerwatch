@@ -27,12 +27,17 @@ block content
                      td new pdu
                      td Running
                      td 5 mins 
-                     td TESTSTS
+                     td 15 kWh
                   for d in test
-                    tr
-                      td=d['id']
+                    tr.clickable
+                      td
+                        a(href="/pdugraph/#{d['id']}")=d['id']
                       td=d['name']
-                      td=d['status']
+                      td
+                        if d['status']=="online"
+                          span.label.label-success Online
+                        else
+                          span.label.label-important Dead
                       td=d['uptime']
                       td=d['consumption']
 
@@ -57,11 +62,11 @@ block content
                   input#ipaddress(type='text', placeholder='IP Address')
               .control-group
                 .controls
-                  button.btn(type='submit') Sign in
+                  button.btn(type='submit') Add
 
 block othernav
    ul.nav
-      li.active
-         a(hreaf="/") Dashboard
       li
-         a(hreaf="/") View PDUs
+         a(href="/") Home
+      li.active
+         a(href="/") Admin Page

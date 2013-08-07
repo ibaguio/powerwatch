@@ -9,10 +9,12 @@ html
     link(href='static/bootstrap/css/bootstrap-responsive.min.css', rel='stylesheet', media='screen')
     link(href='static/main.css', rel='stylesheet', media='screen')
   body
+
+
     .navbar.navbar-fixed-top.navbar-inverse
       .navbar-inner
-        .container
-          a.brand(href='#') Watts App
+        .container  
+          a.brand(href='/') Watts App
           block othernav
           
           ul.nav.pull-right
@@ -26,6 +28,10 @@ html
                 li
                   a(role="menu" ,href="/logout") Logout
     block content
+      .container
+        .row
+          .footer.span12.text-center
+          | 2013 Power Watch          
   //
      We place this at the bottom of the page so it can load faster 
   //script(src='http://code.jquery.com/jquery.js')
