@@ -52,7 +52,7 @@ def login(): #Pseudo Login
 
 @app.route("/pdugraph/<pdu_id>")
 def graph_data(pdu_id):
-	return render("graph.jade")
+	return render("graph.jade",title="PDU Graph")
 
 
 #@app.route("/card", methods=['GET'])

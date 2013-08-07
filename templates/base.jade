@@ -18,13 +18,13 @@ html
           block othernav
           block account 
     block content
-      .container
-        .row
-          .footer.span12.text-center
+    .container
+      .row
+        .footer.span12.text-center.is-padded
           | 2013 Power Watch          
-  //
-     We place this at the bottom of the page so it can load faster 
-  //script(src='http://code.jquery.com/jquery.js')
-  script(src='/static/jquery-2.0.2.min.js')
-  script(src='/static/bootstrap/js/bootstrap.js')  
-  script(src='/static/dashboard.js')  
+  // We place this at the bottom of the page so it can load faster 
+  block scripts
+    //script(src='http://code.jquery.com/jquery.js')
+    script(src='/static/jquery-2.0.2.min.js')
+    script(src='/static/bootstrap/js/bootstrap.js')  
+    script(src='/static/dashboard.js')  
