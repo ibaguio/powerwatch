@@ -56,6 +56,12 @@ def graph_data(pdu_id):
 	data="[1,2,3,4,5,1,2,3,2,1,3,2,3,4,5]"
 	return render("graph.jade",title="PDU Graph",graphdata=data,name=name)
 
+@app.route("/dashboard")
+def dashboard():
+	username = request.cookies.get('username')
+	if isLoggedIn():
+		return render("dashboard.jade",title="Dashboard",user=username,test=test)
+	return render("login.jade",title="Login")
 
 #@app.route("/card", methods=['GET'])
 #def get_card():

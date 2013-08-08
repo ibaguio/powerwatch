@@ -9,7 +9,7 @@ block content
 block othernav
    ul.nav
       li
-         a(href="/") Home
+         a(href="/dashboard") Home
       li
          a(href="/") Admin Page
 
@@ -38,10 +38,13 @@ block scripts
                 text: 'Power Consumption'
             },
             xAxis: {
+                title:{
+                    text: 'Time'
+                }
             },
             yAxis: {
                 title: {
-                    text: 'Energy (kWh)'
+                    text: 'Power (kW)'
                 }
             },
             series: [{

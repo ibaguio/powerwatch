@@ -1,7 +1,12 @@
-.card.span3
-	.is-padded
-		h1=name
-		p=pow
-		p=temp
-		.status
-			span.badge.badge-success=status
+a(href="/pdugraph/#{d['id']}")
+	.card.span3
+		.is-padded
+			h1=d['name']
+			p=d['uptime']
+			p=d['consumption']
+				|  kWh
+			.status
+			if d['status']=="online"
+				span.label.label-success Online
+			else
+				span.label.label-important Offline
