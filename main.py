@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template as render
 from flask import request, make_response, redirect
 
-import database, json
+import database, json, math
 
 app = Flask(__name__)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
@@ -35,18 +35,19 @@ def logout():
 def home():
 	username = request.cookies.get('username')
 	if isLoggedIn():
-		return render("admin.jade", title="Admin",user=username,test=test)	
+		return render("admin.jade", title="Admin",user=username,pdus = database.getPDUS())	
 	return render("login.jade",title="Login")
 
-@app.route("/login")
+@app.route("/login", methods=["GET","POST"])
 def login(): #Pseudo Login
 	if request.method == 'GET':
+		print "Redirecting to homepage"
 		return redirect("/")
 
 	session['username'] = request.form['username']
 	session['password'] = request.form['password']
 	if session['username'] == "admin" and session['password'] == "admin":
-		resp = make_response(render("admin.jade", title="Admin",user=session['username'],test=test))
+		resp = make_response(render("admin.jade", title="Admin",user=session['username'],pdus = database.getPDUS()))
 		resp.set_cookie('username',session['username'])
 		resp.set_cookie('credentials',SECRET_WORD)
 		return resp
@@ -55,7 +56,17 @@ def login(): #Pseudo Login
 
 @app.route("/pdugraph/<pdu_id>")
 def graph_data(pdu_id):
-	return render("graph.jade")
+	username = request.cookies.get('username')
+	name="PDU"+pdu_id
+	data="[1,2,3,4,5,1,2,3,2,1,3,2,3,4,5]"
+	return render("graph.jade",title="PDU Graph",graphdata=data,user=username,name=name)
+
+@app.route("/dashboard")
+def dashboard():
+	username = request.cookies.get('username')
+	if isLoggedIn():
+		return render("dashboard.jade",title="Dashboard",user=username,test=test)
+	return render("login.jade",title="Login")
 
 #@app.route("/card", methods=['GET'])
 #def get_card():
@@ -79,11 +90,17 @@ def newPDU():
 		return len(subs) == 4
 
 	if isLoggedIn():
-		print 
-		pdu_name = request.form['pdu_name']
-		ip_address = request.form['ip_address']
+		try:
+			print request.form
+			pdu_name = request.form['pdu_name']
+			ip_address = request.form['ip_address']
+			database.newPDU(pdu_name,ip_address)
+		except Exception, e:
+			print "Err"
+			print e
 
-		print 2
+		return redirect("/")
+		
 	return notLoggedIn()
 
 def notLoggedIn():
@@ -113,6 +130,7 @@ def post_info(pdu_id):
 		return INVALID_PARAMS
 
 	#save data
+	data_["device_id"] = pdu_id
 	if database.save_data(data_): return REQUEST_OK
 	else: return REQUEST_FAILED
 
@@ -127,9 +145,40 @@ def checkData(data_):
 
 	return valid
 
+#returns json info about pdu's uptime and total consumption
+@app.route("/pdu/info/<pdu_id>", methods=["GET"])
+def getPDUInfo(pdu_id):
+	#solves the estimated total consumption
+	#ws
+	def solveConsumption(rows):
+		sum_ = 0.0
+		for i in range(len(rows)-1):
+			sum_ += ((rows[i][0] + rows[i+1][0])/2) * (rows[i+1][1] - rows[i][1])
+
+		kwHr = str(sum_ / 3600000.0)
+		return "%s kW hr"%(str(kwHr)[:kwHr.index('.')+7])
+
+	def millsecToTime(secs):
+		mins = math.ceil(secs / 60)
+		if mins < 1: return "1 min"
+		return str(mins).split('.')[0] + " mins"
+
+	#get total consumption
+	if not checkPDU(pdu_id): return INVALID_PDU
+	all_rows = database.query_db("SELECT watts, time FROM device_readings WHERE device_id = ? ORDER BY time ASC;",pdu_id)
+
+	#get uptime
+	first_row = database.query_db("SELECT time FROM device_readings WHERE device_id = ? ORDER BY time ASC;",pdu_id,True)
+	last_row = database.query_db("SELECT time FROM device_readings WHERE device_id = ? ORDER BY time DESC;",pdu_id,True)
+
+	data = {'uptime':millsecToTime(last_row[0]-first_row[0]),'consumption':solveConsumption(all_rows),'status':"Online"}
+	return json.dumps(data)
+
 #check the database if pdu_id is valid
 def checkPDU(pdu_id):
-	return True
+	p = database.query_db("select count(*) from devices where device_id = ?;",pdu_id)
+	print "checking pdu. len: ",len(p)
+	return len(p) == 1
 
 #inserts the pdu_id to the cache of active pdus
 def addPDUCache(pdu_id):

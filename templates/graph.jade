@@ -1,14 +1,16 @@
 extends base.jade
 block content
-   .container
-      .footer.span12.text-center
-         | 2013 Power Watch
+  .container
+    .is-padded  
+      h1.text-center #{name}
+      .row
+          div.offset2.span8#graph(height="400px")
 
 block othernav
    ul.nav
       li
-         a(href="/") Home
-      li.active
+         a(href="/dashboard") Home
+      li
          a(href="/") Admin Page
 
 block account 
@@ -24,3 +26,29 @@ block account
           a(role="menu" ,href="/settings") Settings
         li
           a(role="menu" ,href="/logout") Logout
+block scripts
+  | {{ super() }}
+  script(src='/static/highcharts-3.0.4/js/highcharts.js')
+  script
+        $('#graph').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Power Consumption'
+            },
+            xAxis: {
+                title:{
+                    text: 'Time'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Power (kW)'
+                }
+            },
+            series: [{
+                name: '#{name}',
+                data: #{graphdata}
+            }]
+        });

@@ -5,3 +5,4 @@ database/*
 templates/*.html
 test/*
 highcharts*
+venv

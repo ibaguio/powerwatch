@@ -26,25 +26,23 @@ block content
                   tr
                      td ID
                      td Name
+                     td Registered IP
                      td Status
                      td Uptime
                      td Consumption
                tbody
-                  for d in test
-                    tr.clickable
+                  for pdu in pdus
+                    tr.clickable(id='pdu_%s'%(pdu[0]))
                       td
-                        a(href="/pdugraph/#{d['id']}")=d['id']
-                      td=d['name']
-                      td
-                        if d['status']=="online"
-                          span.label.label-success Online
-                        else
-                          span.label.label-important Offline
-                      td=d['uptime']
-                      td=d['consumption']
-
-      .footer.span12.text-center
-         | 2013 Power Watch
+                        a(href="/pdugraph/%s"%(pdu[0]))=pdu[0]
+                      td=pdu[2]
+                      td=pdu[3]
+                      td(id='stat_pdu_%s'%(pdu[0]))
+                        ="Loading..."
+                      td(id='uptime_pdu_%s'%(pdu[0]))
+                        ="Loading..."
+                      td(id='cons_pdu_%s'%(pdu[0]))
+                        ="Loading..."
 
    .modal.hide.fade#add-pdu(role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
       .modal-header
@@ -59,15 +57,15 @@ block content
               .control-group
                 label.control-label(for='ip_address') IP Address
                 .controls
-                  input#ip_address(type='text', placeholder='IP Address')
+                  input#ip_address(type='text', placeholder='IP Address',name="ip_address") 
               .control-group
                 .controls
                   button.btn(type='submit') Add
-
+    script(src="/static/dash-info.js")
 block othernav
    ul.nav
       li
-         a(href="/") Home
+         a(href="/dashboard") Home
       li.active
          a(href="/") Admin Page
 
@@ -84,3 +82,4 @@ block account
           a(role="menu" ,href="/settings") Settings
         li
           a(role="menu" ,href="/logout") Logout
+
