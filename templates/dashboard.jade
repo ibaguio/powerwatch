@@ -35,8 +35,6 @@ block content
                       td=d['uptime']
                       td=d['consumption']
 
-
-
       .footer.span12.text-center
          | 2013 Power Watch
 
@@ -47,13 +45,13 @@ block content
       .modal-body
         form.form-horizontal(action="/pdu/new", method="post")
             .control-group
-                label.control-label(for='pdu_name') PDU Name
+                label.control-label(for='pdu_name') PDU Name ss
                 .controls
-                  input#pdu_name(type='text', placeholder='PDU Name')
+                  input#pdu_name(type='text', placeholder='PDU Name', name='pdu_name')
               .control-group
                 label.control-label(for='ipaddress') IP Address
                 .controls
-                  input#ipaddress(type='text', placeholder='IP Address')
+                  input#ipaddress(type='text', placeholder='IP Address', name='ipaddress')
               .control-group
                 .controls
                   button.btn(type='submit') Add

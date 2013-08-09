@@ -1,6 +1,14 @@
 extends base.jade
 block content
    .container
+      if msg:
+        if msg['type'] == 'success':
+          .alert.alert-success
+            =msg['body']
+        else
+          .alert.alert-error
+            =msg['body']
+
       .row
          .span2
             ul.nav.nav-list.well
@@ -35,8 +43,6 @@ block content
                       td=d['uptime']
                       td=d['consumption']
 
-
-
       .footer.span12.text-center
          | 2013 Power Watch
 
@@ -49,11 +55,11 @@ block content
             .control-group
                 label.control-label(for='pdu_name') PDU Name
                 .controls
-                  input#pdu_name(type='text', placeholder='PDU Name')
+                  input#pdu_name(type='text', placeholder='PDU Name',name="pdu_name")
               .control-group
-                label.control-label(for='ipaddress') IP Address
+                label.control-label(for='ip_address') IP Address
                 .controls
-                  input#ipaddress(type='text', placeholder='IP Address')
+                  input#ip_address(type='text', placeholder='IP Address')
               .control-group
                 .controls
                   button.btn(type='submit') Add

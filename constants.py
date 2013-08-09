@@ -3,7 +3,8 @@
 db_folder = "database/"
 db_filename = db_folder + "powerwatch.db"
 
-db_test_accounts = """INSERT INTO account(account_name) VALUES (\'PLDT DataCenter\');
+db_test_accounts = """INSERT INTO account(account_name) VALUES (\'TEST ACCOUNT\')
+                      INSERT INTO account(account_name) VALUES (\'PLDT DataCenter\');
                       INSERT INTO account(account_name) VALUES (\'Google Servers\')
                       INSERT INTO account(account_name) VALUES (\'UP DILNET\')
                       INSERT INTO account(account_name) VALUES (\'Amazon Web Services\')"""
@@ -17,7 +18,7 @@ db_init_script = """CREATE TABLE IF NOT EXISTS account (account_id INT, account_
 db_insert_reading = """INSERT INTO device_readings(voltage, current, watts, pf, va,vr, time) VALUES(%(volt)f, %(amp)f, %(watts)f,
 					%(pf)f, %(va)f, %(vr)f, \'%(dt)s\');"""
 
-db_insert_pud = """INSERT INTO devices(account_id, device_name, ip_address) VALUES (%(account_id)d, \'%(device_name)s\', \'%(ip_address)s\')"""
+db_insert_pdu = """INSERT INTO devices(account_id, device_name, ip_address) VALUES (%(account_id)d, \'%(device_name)s\', \'%(ip_address)s\')"""
 
 #JSON keywords
 VOLT = "volt"

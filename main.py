@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template as render
-from flask import request, make_response
+from flask import request, make_response, redirect
 
 import database, json
 
@@ -38,8 +38,11 @@ def home():
 		return render("admin.jade", title="Admin",user=username,test=test)	
 	return render("login.jade",title="Login")
 
-@app.route("/login",methods=['POST'])
+@app.route("/login")
 def login(): #Pseudo Login
+	if request.method == 'GET':
+		return redirect("/")
+
 	session['username'] = request.form['username']
 	session['password'] = request.form['password']
 	if session['username'] == "admin" and session['password'] == "admin":
@@ -54,7 +57,6 @@ def login(): #Pseudo Login
 def graph_data(pdu_id):
 	return render("graph.jade")
 
-
 #@app.route("/card", methods=['GET'])
 #def get_card():
 #	print "YouGETCARD"
@@ -64,8 +66,24 @@ def graph_data(pdu_id):
 
 @app.route("/pdu/new",methods=['POST'])
 def newPDU():
+	#submethod that checks if a string is a valid form for ip address
+	def validIPAddress(ipaddr):
+		print ipaddr
+		subs = ipaddr.split('.')
+		for num in subs:
+			try:
+				num = int(num)
+				if num > 255 and num < 1: raise
+			except:
+				return
+		return len(subs) == 4
+
 	if isLoggedIn():
-		return request.form
+		print 
+		pdu_name = request.form['pdu_name']
+		ip_address = request.form['ip_address']
+
+		print 2
 	return notLoggedIn()
 
 def notLoggedIn():
