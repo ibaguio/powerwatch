@@ -52,9 +52,10 @@ def login(): #Pseudo Login
 
 @app.route("/pdugraph/<pdu_id>")
 def graph_data(pdu_id):
+	username = request.cookies.get('username')
 	name="PDU"+pdu_id
 	data="[1,2,3,4,5,1,2,3,2,1,3,2,3,4,5]"
-	return render("graph.jade",title="PDU Graph",graphdata=data,name=name)
+	return render("graph.jade",title="PDU Graph",graphdata=data,user=username,name=name)
 
 @app.route("/dashboard")
 def dashboard():
