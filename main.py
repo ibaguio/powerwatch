@@ -155,8 +155,8 @@ def getPDUInfo(pdu_id):
 		for i in range(len(rows)-1):
 			sum_ += ((rows[i][0] + rows[i+1][0])/2) * (rows[i+1][1] - rows[i][1])
 
-		kwHr = str(sum_ / 3600000.0)
-		return "%s kW hr"%(str(kwHr)[:kwHr.index('.')+7])
+		kwHr = str(sum_ / 3600.0)
+		return "%s W hr"%(str(kwHr)[:kwHr.index('.')+7])
 
 	def millsecToTime(secs):
 		mins = math.ceil(secs / 60)

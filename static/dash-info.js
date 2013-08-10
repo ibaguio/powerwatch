@@ -33,4 +33,4 @@ window.setInterval(function refresh(){
    for (var pdu_ = 1 ; pdu_ <= window.pdu_count; pdu_++) {
       requestInfo(pdu_);
    };
-},5000)
+},1000)
