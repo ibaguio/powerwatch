@@ -1,5 +1,6 @@
 #constants file
 
+#database constants
 db_folder = "database/"
 db_filename = db_folder + "powerwatch.db"
 
@@ -19,6 +20,16 @@ db_insert_reading = """INSERT INTO device_readings(device_id, voltage, current, 
 					%(pf)f, %(va)f, %(vr)f, \'%(dt)s\');"""
 
 db_insert_pdu = """INSERT INTO devices(account_id, device_name, ip_address) VALUES (%(account_id)d, \'%(pdu_name)s\', \'%(ip_address)s\')"""
+
+#string constants
+INVALID_PDU = "INVALID_PDU"
+INVALID_PARAMS = "INVALID_PARAMS"
+REQUEST_OK = "OK"
+REQUEST_FAILED = "NOT"
+SECRET_WORD = "ivan_pogi"
+
+#int constants
+TIME_THRESHOLD = 20.0   #the time difference between the last data receive to determine if the pdu is online
 
 #JSON keywords
 VOLT = "volt"

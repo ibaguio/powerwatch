@@ -1,6 +1,6 @@
 //refreshes the dashboard info every few seconds
 
-window.pdu_count = 1;
+window.pdu_count = 3;
 function ajaxRequest(){
     var xmlhttp;
     if (window.XMLHttpRequest)// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -18,6 +18,7 @@ function requestInfo(pdu){
                 $("td#stat_pdu_"+pdu).text(jdata['status'])
                 $("td#uptime_pdu_"+pdu).text(jdata['uptime'])
                 $("td#cons_pdu_"+pdu).text(jdata['consumption'])
+                $("td#price_pdu_"+pdu).text(jdata['price'])
             }else{
             }
         }
@@ -33,4 +34,4 @@ window.setInterval(function refresh(){
    for (var pdu_ = 1 ; pdu_ <= window.pdu_count; pdu_++) {
       requestInfo(pdu_);
    };
-},1000)
+},3000)

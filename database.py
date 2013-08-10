@@ -16,10 +16,10 @@ def get_db():
 	return db
 
 def query_db(query, args=(), one=False):
-    cur = get_db().execute(query, args)
-    rv = cur.fetchall()
-    cur.close()
-    return (rv[0] if rv else None) if one else rv
+	cur = get_db().execute(query, args)
+	rv = cur.fetchall()
+	cur.close()
+	return (rv[0] if rv else None) if one else rv
 
 #creates the 'database' folder
 def create_db_folder():
@@ -44,7 +44,7 @@ def save_data(data_):
 	print "SQL:",insert_sql
 	return dbinsert(insert_sql)
 
-def newPDU(pdu_name, ip_address, account_id = 1):
+def newPDU(pdu_name, ip_address, account_id=1):
 	data_ = {"pdu_name":pdu_name, "ip_address":ip_address, "account_id":account_id}
 	insert_sql = constants.db_insert_pdu%(data_)
 	print "SQL:",insert_sql
