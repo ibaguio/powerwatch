@@ -41,13 +41,11 @@ def init_db():
 
 def save_data(data_):
 	insert_sql = constants.db_insert_reading%(data_)
-	print "SQL:",insert_sql
 	return dbinsert(insert_sql)
 
 def newPDU(pdu_name, ip_address, account_id=1):
 	data_ = {"pdu_name":pdu_name, "ip_address":ip_address, "account_id":account_id}
 	insert_sql = constants.db_insert_pdu%(data_)
-	print "SQL:",insert_sql
 	return dbinsert(insert_sql)
 
 def dbinsert(insertSQL):
@@ -71,7 +69,6 @@ def close_connection(exception):
 def getPDUS():
 	select_sql = """SELECT * FROM devices;""";
 	pdus = query_db(select_sql)
-	print pdus
 	return pdus
 
 """

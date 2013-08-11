@@ -53,7 +53,7 @@ def login(): #Pseudo Login
 	if session['username'] == "admin" and session['password'] == "admin":
 		resp = make_response(showAdmin())
 		resp.set_cookie('username',session['username'])
-		resp.set_cookie('credentials',SECRET_WORD)
+		resp.set_cookie('credentials',constants.SECRET_WORD)
 		return resp
 	else:
 		return render("login.jade",error="Username/Password not found",title="Login")
@@ -69,7 +69,10 @@ def graph_data(pdu_id):
 	rows = database.query_db("SELECT watts FROM device_readings WHERE device_id = ? LIMIT ? OFFSET ?;",[pdu_id,50,offset])
 	name="Watt Consumption for PDU "+pdu_id
 	data= str([watt[0] for watt in rows])
-	return render("graph.jade",title="PDU Graph",graphdata=data,user=username,name=name)
+	return render("graph.jade",title="PDU Graph",graphdata=data,
+		user=username,
+		pdu_id=pdu_id,
+		name=name,isOnline=isPDUOnline(pdu_id))
 
 @app.route("/dashboard")
 def dashboard():
@@ -145,7 +148,6 @@ def post_info(pdu_id):
 		print "PDU ID NOT IN CACHE****"
 		cache_[pdu_id] = {"offset":0, "uptime":0.0, "rcons": 0.0}
 	cache_[pdu_id]["last_rec"] = time.time()	#update last recieve info
-	print "NEW LAST REC for",pdu_id," is",cache_[pdu_id]["last_rec"]
 	if database.save_data(data_): return constants.REQUEST_OK
 	else: return constants.REQUEST_FAILED
 
@@ -186,16 +188,14 @@ def getPDUInfo(pdu_id):
 	#this method is not accurate, ask yourself why
 	def getUptime():
 		first_row = database.query_db("""SELECT time FROM device_readings WHERE 
-		device_id = ? ORDER BY time ASC;""",pdu_id,True)
+			device_id = ? ORDER BY time ASC;""",pdu_id,True)
 		last_row = database.query_db("""SELECT time FROM device_readings WHERE 
-		device_id = ? ORDER BY time DESC;""",pdu_id,True)
+			device_id = ? ORDER BY time DESC;""",pdu_id,True)
 		return last_row[0]-first_row[0]
 		
-
 	if not checkPDU(pdu_id): return constants.INVALID_PDU
 	if pdu_id in cache_: #pdu in cache, load only new input
 		offset = cache_[pdu_id]["offset"]
-		print "OFFSET",offset
 		new_rows = database.query_db("""SELECT watts, time FROM device_readings WHERE
 			device_id = ? ORDER BY time ASC LIMIT ?,100 ;""",[pdu_id,offset])
 
@@ -205,7 +205,7 @@ def getPDUInfo(pdu_id):
 
 		kwHr = cache_[pdu_id]["rcons"]
 		data = {'uptime':millsecToTime(getUptime()),
-					'consumption':"%s W hr"%(str(kwHr)[:str(kwHr).index('.')+7]),
+					'consumption':"%s W hr"%(str(kwHr)[:str(kwHr).index('.')+5]),
 					'price':solveBill(kwHr)}
 
 		return json.dumps(data)
@@ -219,7 +219,6 @@ def getPDUInfo(pdu_id):
 
 		data = {'uptime':utime,
 					'consumption':"%s W hr"%(str(kwHr)[:str(kwHr).index('.')+7]),
-					'status':"Online",
 					'price':solveBill(kwHr)}
 		cache_[pdu_id] = {"rcons":kwHr,
 								"offset":len(all_rows)}
@@ -236,21 +235,20 @@ def getPDUStatus():
 	time_now = time.time()
 	for pdu in pdus_:
 		status[int(pdu)] = "Offline"
-		try:
-			print "TIME NOW:", time_now
-			print "LAST REC: for ",pdu," is ",cache_[pdu]["last_rec"]
-			if cache_[pdu]["last_rec"] + constants.TIME_THRESHOLD > time_now:
-				status[int(pdu)] = "Online"
-				print "ONLINE ONLINE ONLINE ONLINE ONLINE ONLINE ONLINE ONLINE"
-		except Exception, e:
-			print e
+		if isPDUOnline(pdu): status[int(pdu)] = "Online"
 			
 	return json.dumps(status)
+
+def isPDUOnline(pdu_id):
+	try:
+		if cache_[pdu_id]["last_rec"] + constants.TIME_THRESHOLD > time_now:
+			return True
+	except Exception, e:
+		pass#print e
 
 #check the database if pdu_id is valid
 def checkPDU(pdu_id):
 	p = database.query_db("SELECT count(*) FROM devices WHERE device_id = ?;",pdu_id)
-	print "checking pdu. len: ",len(p)
 	return len(p) == 1
 
 #inserts the pdu_id to the cache of active pdus
