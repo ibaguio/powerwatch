@@ -29,7 +29,7 @@ REQUEST_FAILED = "NOT"
 SECRET_WORD = "ivan_pogi"
 
 #int constants
-TIME_THRESHOLD = 20.0   #the time difference between the last data receive to determine if the pdu is online
+TIME_THRESHOLD = 7.0   #the time difference between the last data receive to determine if the pdu is online
 
 #JSON keywords
 VOLT = "volt"

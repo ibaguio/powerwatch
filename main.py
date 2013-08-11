@@ -226,13 +226,12 @@ def getPDUInfo(pdu_id):
 
 @app.route("/pdu/status")
 def getPDUStatus():
-	import time
 	pdus = request.args.get("ids",'')
 	if not pdus: return ""
 	pdus_ = pdus.split(',')
 	
 	status = {}
-	time_now = time.time()
+	
 	for pdu in pdus_:
 		status[int(pdu)] = "Offline"
 		if isPDUOnline(pdu): status[int(pdu)] = "Online"
@@ -240,11 +239,14 @@ def getPDUStatus():
 	return json.dumps(status)
 
 def isPDUOnline(pdu_id):
+	import time
 	try:
+		time_now = time.time()
 		if cache_[pdu_id]["last_rec"] + constants.TIME_THRESHOLD > time_now:
 			return True
 	except Exception, e:
-		pass#print e
+		print "IS PDU ONLINE ERROR"
+		print e
 
 #check the database if pdu_id is valid
 def checkPDU(pdu_id):
