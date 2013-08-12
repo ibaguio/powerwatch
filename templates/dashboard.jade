@@ -1,9 +1,11 @@
 extends base.jade
 block content
-   .container
+  .container
       .row
         for pdu in pdus
           include card.jade
+
+
 
 block othernav
    ul.nav
