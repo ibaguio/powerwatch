@@ -39,13 +39,13 @@ block content
                       td=pdu[2]
                       td.removemobile=pdu[3]
                       td(id='stat_pdu_%s'%(pdu[0]))
-                        ="Loading..."
+                        img(src="/static/ajax-loader.gif")
                       td.removemobile(id='uptime_pdu_%s'%(pdu[0]))
-                        ="Loading..."
+                        img(src="/static/ajax-loader.gif")
                       td(id='cons_pdu_%s'%(pdu[0]))
-                        ="Loading..."
+                        img(src="/static/ajax-loader.gif")
                       td(id='price_pdu_%s'%(pdu[0]))
-                        ="Loading..."
+                        img(src="/static/ajax-loader.gif")
 
    .modal.hide.fade#add-pdu(role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
       .modal-header
