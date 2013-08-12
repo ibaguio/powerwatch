@@ -78,7 +78,8 @@ def graph_data(pdu_id):
 def dashboard():
 	username = request.cookies.get('username')
 	if isLoggedIn():
-		return render("dashboard.jade",title="Dashboard",user=username,test=test)
+		pdus = database.getPDUS()
+		return render("dashboard.jade",title="Dashboard",user=username,pdus=pdus,pdu_count=len(pdus))
 	return render("login.jade",title="Login")
 
 #@app.route("/card", methods=['GET'])
@@ -194,6 +195,9 @@ def getPDUInfo(pdu_id):
 		return last_row[0]-first_row[0]
 		
 	if not checkPDU(pdu_id): return constants.INVALID_PDU
+
+	dev_name = database.query_db("""SELECT device_name from devices WHERE device_id = ?""",pdu_id,True)[0];
+
 	if pdu_id in cache_: #pdu in cache, load only new input
 		offset = cache_[pdu_id]["offset"]
 		new_rows = database.query_db("""SELECT watts, time FROM device_readings WHERE
@@ -206,7 +210,7 @@ def getPDUInfo(pdu_id):
 		kwHr = cache_[pdu_id]["rcons"]
 		data = {'uptime':millsecToTime(getUptime()),
 					'consumption':"%s W hr"%(str(kwHr)[:str(kwHr).index('.')+5]),
-					'price':solveBill(kwHr)}
+					'price':solveBill(kwHr),"name":dev_name}
 
 		return json.dumps(data)
 	else: #not in cache, load everything
@@ -219,7 +223,7 @@ def getPDUInfo(pdu_id):
 
 		data = {'uptime':utime,
 					'consumption':"%s W hr"%(str(kwHr)[:str(kwHr).index('.')+7]),
-					'price':solveBill(kwHr)}
+					'price':solveBill(kwHr),"name":dev_name}
 		cache_[pdu_id] = {"rcons":kwHr,
 								"offset":len(all_rows)}
 		return json.dumps(data)

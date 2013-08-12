@@ -1,12 +1,10 @@
-a(href="/pdugraph/#{d['id']}")
+a(href="/pdugraph/%d"%(pdu[0]))
 	.card.span3
 		.is-padded
-			h1=d['name']
-			p=d['uptime']
-			p=d['consumption']
-				|  kWh
-			.status
-			if d['status']=="online"
-				span.label.label-success Online
-			else
-				span.label.label-important Offline
+			h1=pdu[2]
+			p(id="uptime_pdu%s"%(pdu[0]))
+				span.label.label-alert Loading ...
+			p(id="cons_pdu%s"%(pdu[0]))
+				span.label.label-alert Loading ...
+			p(id="stat_pdu%s"%(pdu[0]))
+				span.label.label-alert Loading ...

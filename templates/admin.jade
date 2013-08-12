@@ -75,7 +75,11 @@ block content
                       $("td#uptime_pdu_"+pdu).text(jdata['uptime'])
                       $("td#cons_pdu_"+pdu).text(jdata['consumption'])
                       $("td#price_pdu_"+pdu).text(jdata['price'])
-                  }
+                  }else if (xmlhttp.status === 500){
+                   $("td#uptime_pdu_"+pdu).html("No Data");
+                    $("td#cons_pdu_"+pdu).html("No Data");
+                    $("td#price_pdu_"+pdu).html("No Data");
+                }
               }
           }
           xmlhttp.open("GET","/pdu/info/"+pdu);

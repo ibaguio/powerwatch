@@ -2,27 +2,8 @@ extends base.jade
 block content
    .container
       .row
-        .is-padded
-        for d in test
+        for pdu in pdus
           include card.jade
-
-   .modal.hide.fade#add-pdu(role="dialog",aria-labelledby="myModalLabel",aria-hidden="true")
-      .modal-header
-         button.close(type="button",data-dismiss="modal",aria-hidden="false",role="dialog")&times
-         h3 Add PDU
-      .modal-body
-        form.form-horizontal(action="/pdu/new", method="post")
-            .control-group
-                label.control-label(for='pdu_name') PDU Name ss
-                .controls
-                  input#pdu_name(type='text', placeholder='PDU Name', name='pdu_name')
-              .control-group
-                label.control-label(for='ipaddress') IP Address
-                .controls
-                  input#ipaddress(type='text', placeholder='IP Address', name='ipaddress')
-              .control-group
-                .controls
-                  button.btn(type='submit') Add
 
 block othernav
    ul.nav
@@ -44,3 +25,64 @@ block account
           a(role="menu" ,href="/settings") Settings
         li
           a(role="menu" ,href="/logout") Logout
+
+block scripts
+  | {{ super() }}
+  script
+    window.pdu_count = #{pdu_count};
+    function requestInfo(pdu){
+        var xmlhttp = ajaxRequest();
+        xmlhttp.onreadystatechange=function(){
+            if (xmlhttp.readyState === 4){
+                if (xmlhttp.status === 200){
+                    var jdata=JSON.parse(xmlhttp.responseText);
+                    console.log(jdata)
+                    $("p#uptime_pdu"+pdu).html(jdata['uptime']);
+                    $("p#cons_pdu"+pdu).html(jdata['consumption']);
+                    $("p#price_pdu"+pdu).html(jdata['price']);
+                }else if (xmlhttp.status === 500){
+                    $("p#uptime_pdu"+pdu).html("No Data");
+                    $("p#cons_pdu"+pdu).html("No Data");
+                    $("p#price_pdu"+pdu).html("No Data");
+                }
+            }
+        }
+        xmlhttp.open("GET","/pdu/info/"+pdu);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send();
+    }
+    function requestStatus(){
+      var xmlhttp = ajaxRequest();
+        xmlhttp.onreadystatechange=function(){
+            if (xmlhttp.readyState === 4){
+                if (xmlhttp.status === 200){
+                    console.log(xmlhttp.responseText);
+                    var jdata=JSON.parse(xmlhttp.responseText);
+                    for (var pud_id in jdata){
+                      if (jdata[pud_id] === "Online")
+                        $("p#stat_pdu"+pud_id).html("<span class='label label-success'>Online</span>");
+                      else
+                        $("p#stat_pdu"+pud_id).html("<span class='label label-important'>Offline</span>");
+                    }
+                }
+            }
+        }
+        url = "/pdu/status?ids=";
+        for (var pdu_ = 1 ; pdu_ <= window.pdu_count; pdu_++) {
+          url += pdu_;
+          if (pdu_ !== window.pdu_count) url += ",";
+        }
+        xmlhttp.open("GET",url);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send();
+    }
+    if (window.pdu_count > 0){
+      window.setInterval(function refresh(){
+         for (var pdu_ = 1 ; pdu_ <= window.pdu_count; pdu_++) {
+            requestInfo(pdu_);
+         };
+      },3000);
+      window.setInterval(function getStatus(){
+        requestStatus();
+      },4000);
+    }
