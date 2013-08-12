@@ -4,7 +4,30 @@ block content
     .is-padded  
       h1.text-center #{name}
       .row
-          div.offset2.span8#graph(height="400px")
+        .span3
+          ul.nav.nav-list.well
+            li.nav-header PDU Information
+            li
+              table
+                tr
+                  td.span1 <b>Status</b>
+                  td#status
+                    span.label.label-alert Loading ...
+                tr
+                  td.span1 <b>Uptime</b>
+                  td#uptime
+                    span.label.label-alert Loading ...
+                tr
+                  td.span1 <b>Consu</b>
+                  td#cons
+                    span.label.label-alert Loading ...
+                tr
+                  td.span1 <b>Price</b>
+                  td#price
+                    span.label.label-alert Loading ...
+
+            li.divider
+        .span8.well#graph(height="400px")
 
 block othernav
    ul.nav
@@ -26,29 +49,71 @@ block account
           a(role="menu" ,href="/settings") Settings
         li
           a(role="menu" ,href="/logout") Logout
+
 block scripts
   | {{ super() }}
   script(src='/static/highcharts-3.0.4/js/highcharts.js')
   script
-        $('#graph').highcharts({
-            chart: {
-                type: 'line'
-            },
+    $('#graph').highcharts({
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Power Consumption'
+        },
+        xAxis: {
+            title:{
+                text: 'Time'
+            }
+        },
+        yAxis: {
             title: {
-                text: 'Power Consumption'
-            },
-            xAxis: {
-                title:{
-                    text: 'Time'
+                text: 'Power (kW)'
+            }
+        },
+        series: [{
+            name: '#{name}',
+            data: #{graphdata}
+        }]
+    });
+    
+    function requestStatus(){
+      var xmlhttp = ajaxRequest();
+      xmlhttp.onreadystatechange=function(){
+          if (xmlhttp.readyState === 4){
+              if (xmlhttp.status === 200){
+                  var jdata=JSON.parse(xmlhttp.responseText);
+                  for (var pud_id in jdata){
+                    if (jdata[pud_id] === "Online")
+                      $("td#status").html("<span class='label label-success'>Online</span>");
+                    else
+                      $("td#status").html("<span class='label label-important'>Offline</span>");
+                  }
+              }
+          }
+      }
+      url = "/pdu/status?ids="+#{pdu_id};
+      xmlhttp.open("GET",url);
+      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xmlhttp.send();
+    }
+    
+    function requestInfo(pdu){
+        var xmlhttp = ajaxRequest();
+        xmlhttp.onreadystatechange=function(){
+            if (xmlhttp.readyState === 4){
+                if (xmlhttp.status === 200){
+                    var jdata=JSON.parse(xmlhttp.responseText);
+                    $("td#uptime").html(jdata['uptime'])
+                    $("td#cons").html(jdata['consumption'])
+                    $("td#price").html(jdata['price'])
                 }
-            },
-            yAxis: {
-                title: {
-                    text: 'Power (kW)'
-                }
-            },
-            series: [{
-                name: '#{name}',
-                data: #{graphdata}
-            }]
-        });
+            }
+        }
+        xmlhttp.open("GET","/pdu/info/"+#{pdu_id});
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send();
+    }
+    window.setInterval(function(){ requestInfo();},2000);
+    window.setInterval(function(){ requestStatus();},10000);
+    requestStatus();

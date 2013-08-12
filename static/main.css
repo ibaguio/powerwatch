@@ -2,10 +2,17 @@
   border-radius: 15px;
   background-color: #505050;
   color: #fff;
+  margin-bottom: 10px;
 }
+
+.row{
+  margin-top:10px;
+}
+
 .card:hover {
   background-color: #909090;
 }
+
 .is-padded {
   padding: 10px;
 }
@@ -38,4 +45,29 @@ tr.clickable{
 
 .error{
   color:red;
+}
+
+
+@media (max-width: 980px) {
+  body{
+    padding-top: 0px;
+  }
+
+  .row{
+  margin-top:5px;
+}
+
+}
+
+@media (max-width: 767px) {
+  body{
+    padding-top: 0px;
+  }
+
+  .row{
+  margin-top:0px;
+}
+  .card{
+    margin: 5px;
+  }
 }
