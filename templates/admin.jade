@@ -24,23 +24,23 @@ block content
             table.table.table-bordered.table-hover
                thead
                   tr
-                     td ID
+                     td.removemobile ID
                      td Name
-                     td Registered IP
+                     td.removemobile Registered IP
                      td Status
-                     td Uptime
+                     td.removemobile Uptime
                      td Consumption
                      td Price
                tbody
                   for pdu in pdus
                     tr.clickable(id='pdu_%s'%(pdu[0]))
-                      td
+                      td.removemobile
                         a(href="/pdugraph/%s"%(pdu[0]))=pdu[0]
                       td=pdu[2]
-                      td=pdu[3]
+                      td.removemobile=pdu[3]
                       td(id='stat_pdu_%s'%(pdu[0]))
                         ="Loading..."
-                      td(id='uptime_pdu_%s'%(pdu[0]))
+                      td.removemobile(id='uptime_pdu_%s'%(pdu[0]))
                         ="Loading..."
                       td(id='cons_pdu_%s'%(pdu[0]))
                         ="Loading..."
