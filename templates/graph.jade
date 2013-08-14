@@ -114,6 +114,6 @@ block scripts
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send();
     }
-    window.setInterval(function(){ requestInfo();},2000);
-    window.setInterval(function(){ requestStatus();},10000);
+    window.setInterval(function(){ requestInfo();},500);
+    window.setInterval(function(){ requestStatus();},1000);
     requestStatus();
