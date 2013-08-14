@@ -54,7 +54,10 @@ block scripts
   | {{ super() }}
   script(src='/static/highcharts-3.0.4/js/highcharts.js')
   script
-    $('#graph').highcharts({
+    window.status_ = 'offline';
+    
+    function displayData(data){
+      $('#graph').highcharts({
         chart: {
             type: 'line'
         },
@@ -72,11 +75,30 @@ block scripts
             }
         },
         series: [{
-            name: '#{name}',
-            data: #{graphdata}
-        }]
-    });
-    
+            name: data['name'],
+            data: data['data']
+        }],
+        plotOptions: {
+          series: {
+            animation: false
+          }
+        }
+      });
+    }
+    function refreshGraph(){
+      var xmlhttp = ajaxRequest();
+      xmlhttp.onreadystatechange=function(){
+          if (xmlhttp.readyState === 4){
+              if (xmlhttp.status === 200){
+                  var jdata=JSON.parse(xmlhttp.responseText);
+                  displayData(jdata);
+              }
+          }
+      }
+      xmlhttp.open("GET","/graph_data/"+#{pdu_id});
+      xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xmlhttp.send();
+    }
     function requestStatus(){
       var xmlhttp = ajaxRequest();
       xmlhttp.onreadystatechange=function(){
@@ -84,10 +106,14 @@ block scripts
               if (xmlhttp.status === 200){
                   var jdata=JSON.parse(xmlhttp.responseText);
                   for (var pud_id in jdata){
-                    if (jdata[pud_id] === "Online")
+                    if (jdata[pud_id] === "Online"){
                       $("td#status").html("<span class='label label-success'>Online</span>");
-                    else
+                      if (window.status_ !== 'online') window.status_ = 'online';
+                      
+                    }else{
                       $("td#status").html("<span class='label label-important'>Offline</span>");
+                      if (window.status_ === 'online') window.status_ = 'offline'
+                    }
                   }
               }
           }
@@ -98,7 +124,7 @@ block scripts
       xmlhttp.send();
     }
     
-    function requestInfo(pdu){
+    function requestInfo(){
         var xmlhttp = ajaxRequest();
         xmlhttp.onreadystatechange=function(){
             if (xmlhttp.readyState === 4){
@@ -114,6 +140,11 @@ block scripts
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.send();
     }
-    window.setInterval(function(){ requestInfo();},500);
-    window.setInterval(function(){ requestStatus();},1000);
+    window.setInterval(function(){ 
+      requestStatus();
+      if (window.status_ === 'online') {
+        requestInfo();
+        refreshGraph()
+      }
+    },1000);
     requestStatus();

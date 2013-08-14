@@ -59,20 +59,26 @@ def login(): #Pseudo Login
 		return render("login.jade",error="Username/Password not found",title="Login")
 
 @app.route("/pdugraph/<pdu_id>")
+def pdu_graph(pdu_id):
+	import traceback
+	try:
+		#username = request.cookies.get('username')
+		username = "admin"
+		return render("graph.jade",title="PDU Graph",user=username,pdu_id=pdu_id,isOnline=isPDUOnline(pdu_id))
+	except Exception, e:
+		print e
+		traceback.print_exc()
+
+@app.route("/graph_data/<pdu_id>")
 def graph_data(pdu_id):
-	import random
-	username = request.cookies.get('username')
 	count_ = database.query_db("SELECT count(*) FROM device_readings WHERE device_id = ?",pdu_id)[0][0]
 	if count_ > 50: offset = count_ - 50
 	else: offset = 0
 
 	rows = database.query_db("SELECT watts FROM device_readings WHERE device_id = ? LIMIT ? OFFSET ?;",[pdu_id,50,offset])
 	name="Watt Consumption for PDU "+pdu_id
-	data= str([watt[0] for watt in rows])
-	return render("graph.jade",title="PDU Graph",graphdata=data,
-		user=username,
-		pdu_id=pdu_id,
-		name=name,isOnline=isPDUOnline(pdu_id))
+	data= {'name': name, 'data': [watt[0] for watt in rows]}
+	return json.dumps(data)
 
 @app.route("/dashboard")
 def dashboard():
@@ -251,6 +257,7 @@ def isPDUOnline(pdu_id):
 	except Exception, e:
 		print "IS PDU ONLINE ERROR"
 		print e
+	return False
 
 #check the database if pdu_id is valid
 def checkPDU(pdu_id):
